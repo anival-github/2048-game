@@ -1,34 +1,46 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   Background, BackgroundCell, Field, Playground, PlayGroundCell,
 } from './StyledComponents';
+import { setInitialCells } from '../../redux/field-reducer';
 
-const FieldContainer = ({ cells }) => {
-  const backgroundCells = Array.from(
-    new Array(16),
-    (elem, index) => <BackgroundCell key={index} />,
-  );
+class FieldContainer extends Component {
+  componentDidMount() {
+    this.props.setInitialCells();
+  }
 
-  const playGroundCells = cells.map(({
-    x, y, value, id,
-  }) => (
-    <PlayGroundCell key={id} x={x} y={y} value={value}>
-      {value}
-    </PlayGroundCell>
-  ));
+  render() {
+    const backgroundCells = Array
+      .from(new Array(16), (elem, index) => index)
+      .map((elem) => <BackgroundCell key={elem} />);
 
-  return (
-    <Field>
-      <Background>
-        {backgroundCells}
-      </Background>
-      <Playground>
-        {playGroundCells}
-        <PlayGroundCell />
-      </Playground>
-    </Field>
-  );
-};
+    const playGroundCells = this.props.cells.map(({
+      x, y, value, id,
+    }) => (
+      <PlayGroundCell key={id} x={x} y={y} value={value}>
+        {value}
+      </PlayGroundCell>
+    ));
 
-export default FieldContainer;
+    return (
+      <Field>
+        <Background>
+          {backgroundCells}
+        </Background>
+        <Playground>
+          {playGroundCells}
+          <PlayGroundCell />
+        </Playground>
+      </Field>
+    );
+  }
+}
+
+const mapStateToProps = (state) => ({
+  cells: state.field.cells,
+});
+
+export default connect(mapStateToProps, { setInitialCells })(FieldContainer);

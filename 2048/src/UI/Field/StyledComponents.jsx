@@ -18,14 +18,16 @@ const calculateFontSize = (value) => {
 const calculateSaturation = (step, maxStep) => {
   const maxSaturationInPercent = 100;
   const saturationPerStep = maxSaturationInPercent / maxStep;
-  return Math.floor(saturationPerStep * step);
+  const saturation = Math.floor(saturationPerStep * step);
+  return saturation;
 };
 
 const calculateLightness = (step, maxStep) => {
   const maxLightnessPercent = 100;
   const middleLightnessPercent = 50;
   const lightnessPerStep = middleLightnessPercent / maxStep;
-  return maxLightnessPercent - Math.floor(lightnessPerStep * step);
+  const lightness = maxLightnessPercent - Math.floor(lightnessPerStep * step);
+  return lightness;
 };
 
 const calculateBackgroundColor = (value) => {
@@ -77,7 +79,7 @@ export const BackgroundCell = styled.div`
   `;
 
 export const PlayGroundCell = styled(BackgroundCell)`
-  transform: translate(${({ x }) => x * 113}px, ${({ y }) => y * 113}px);
+  transform: translate(${({ x }) => x * 110}px, ${({ y }) => y * 110}px);
   text-align: center;
   line-height: 100px;
   background-color: ${({ value }) => calculateBackgroundColor(value)};
