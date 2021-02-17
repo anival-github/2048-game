@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-console */
+/* eslint-disable no-undef */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 import React, { Component } from 'react';
@@ -10,6 +13,15 @@ import { setInitialCells } from '../../redux/field-reducer';
 class FieldContainer extends Component {
   componentDidMount() {
     this.props.setInitialCells();
+    document.addEventListener('keydown', this.handleClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleClick);
+  }
+
+  handleClick(e) {
+    console.log(e);
   }
 
   render() {
@@ -32,7 +44,6 @@ class FieldContainer extends Component {
         </Background>
         <Playground>
           {playGroundCells}
-          <PlayGroundCell />
         </Playground>
       </Field>
     );
