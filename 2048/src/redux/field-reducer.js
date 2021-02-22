@@ -1,24 +1,19 @@
+import { directions, moveCells } from '../Logic/moveCells';
+import { getRandomCoord, createCell } from '../Logic/startGame';
+
 const SET_INITIAL_CELLS = 'SET_INITIAL_CELLS';
+const MOVE_PUZZLES = 'MOVE_PUZZLES';
 
 const initialState = {
   cells: [],
 };
 
-const getRandomCoord = () => (
-  Math.floor(Math.random() * 3.9)
-);
-
-const uniqId = (() => {
-  let num = 0;
-  return () => {
-    num += 1;
-    return num;
-  };
-})();
-
-const createCell = (x, y, value) => ({
-  x, y, value, id: uniqId(),
-});
+const mapKeyToDirection = {
+  ArrowUp: directions.UP,
+  ArrowRight: directions.RIGHT,
+  ArrowLeft: directions.LEFT,
+  ArrowDown: directions.DOWN,
+};
 
 export const fieldReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -36,8 +31,16 @@ export const fieldReducer = (state = initialState, action) => {
       if (firstCell.x === secondCell.x && firstCell.y === secondCell.y) {
         firstCell.x = firstCell.x === 0 ? 1 : firstCell.x - 1;
       }
-      return { cells: [firstCell, secondCell] };
+      return {
+        ...state,
+        cells: [firstCell, secondCell],
+      };
     }
+    case MOVE_PUZZLES:
+      return {
+        ...state,
+        cells: moveCells(state.cells, mapKeyToDirection[action.key]),
+      };
     default:
       return state;
   }
@@ -45,4 +48,9 @@ export const fieldReducer = (state = initialState, action) => {
 
 export const setInitialCells = () => ({
   type: SET_INITIAL_CELLS,
+});
+
+export const movePuzzles = (key) => ({
+  type: MOVE_PUZZLES,
+  key,
 });

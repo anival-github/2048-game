@@ -8,20 +8,28 @@ import { connect } from 'react-redux';
 import {
   Background, BackgroundCell, Field, Playground, PlayGroundCell,
 } from './StyledComponents';
-import { setInitialCells } from '../../redux/field-reducer';
+import { setInitialCells, movePuzzles } from '../../redux/field-reducer';
 
 class FieldContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
+
   componentDidMount() {
     this.props.setInitialCells();
-    document.addEventListener('keydown', this.handleClick);
+    document.addEventListener('keydown', this.handleKeyPress);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleClick);
+    document.removeEventListener('keydown', this.handleKeyPress);
   }
 
-  handleClick(e) {
-    console.log(e);
+  handleKeyPress(e) {
+    if (['ArrowUp', 'ArrowRight', 'ArrowLeft', 'ArrowDown'].includes(e.code)) {
+      this.props.movePuzzles(e.code);
+      console.log(e);
+    }
   }
 
   render() {
@@ -54,4 +62,4 @@ const mapStateToProps = (state) => ({
   cells: state.field.cells,
 });
 
-export default connect(mapStateToProps, { setInitialCells })(FieldContainer);
+export default connect(mapStateToProps, { setInitialCells, movePuzzles })(FieldContainer);
