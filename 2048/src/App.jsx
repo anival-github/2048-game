@@ -1,70 +1,54 @@
-/* eslint-disable class-methods-use-this */
+/* eslint-disable no-debugger */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-undef */
 import React from 'react';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import './App.css';
+import useSound from 'use-sound';
+import { connect } from 'react-redux';
 import ControllsPanel from './UI/ControllsPanel/ControllsPanel';
 import FieldContainer from './UI/Field/FieldContainer';
+import Footer from './UI/Layout/Footer';
+import Info from './UI/Layout/Info';
 import Layout from './UI/Layout/Layout';
+import BestScoresContainer from './UI/ControllsPanel/BestScoresContainer';
+import tinkSound from './assets/sounds/tink-sound.wav';
+import SoundsControlls from './UI/ControllsPanel/SoundsControlls';
 
-const App = () => (
-  <div className="App">
-    <Layout>
-      <ControllsPanel />
-      <FieldContainer />
-    </Layout>
-  </div>
-);
+const App = (props) => {
+  const fullScreenHandle = useFullScreenHandle();
 
-export default App;
+  const [moveTileSound] = useSound(
+    tinkSound,
+    {
+      volume: props.soundsVolume,
+      soundEnabled: props.areSoundsEnabled,
+      interrupt: true,
+    },
+  );
 
-// class App extends Component {
-// constructor() {
-// super();
-// this.state = {
-//   cells: [],
-// };
-// this.startGame = this.startGame.bind(this);
-// this.getRandomCoordinate = this.getRandomCoordinate.bind(this);
-// }
+  return (
+    <div className="App">
+      <Layout>
+        <SoundsControlls />
+        <BestScoresContainer>Best</BestScoresContainer>
+        <ControllsPanel
+          fullScreenHandle={fullScreenHandle}
+        />
+        <FullScreen handle={fullScreenHandle}>
+          <FieldContainer moveTileSound={moveTileSound} />
+        </FullScreen>
+        <Info />
+        <Footer />
+      </Layout>
+    </div>
+  );
+};
 
-// componentDidMount() {
-//   this.startGame();
-// }
+const mapStateToProps = (state) => ({
+  areSoundsEnabled: state.sounds.moveTileSounds.isEnabled,
+  soundsVolume: state.sounds.moveTileSounds.volume,
+});
 
-// getRandomCoordinate() {
-//   return Math.floor(Math.random() * 3.9);
-// }
-
-// startGame() {
-//   const firstTile = {
-//     id: 0,
-//     y: this.getRandomCoordinate(),
-//     x: this.getRandomCoordinate(),
-//     value: 2,
-//   };
-
-//   const secondTile = {
-//     id: 1,
-//     y: this.getRandomCoordinate(),
-//     x: this.getRandomCoordinate(),
-//     value: 2,
-//   };
-
-//   if (firstTile.x === secondTile.x && firstTile.y === secondTile.y) {
-//     firstTile.x = firstTile.x === 0 ? 1 : firstTile.x - 1;
-//   }
-
-//   this.setState({ cells: [firstTile, secondTile] });
-// }
-
-//   render() {
-//     const { cells } = this.state;
-//     return (
-//       <div className="App">
-//         <Layout>
-//           <FieldContainer cells={cells}
-//            />
-//         </Layout>
-//       </div>
-//     );
-//   }
-// }
+export default connect(mapStateToProps, {})(App);

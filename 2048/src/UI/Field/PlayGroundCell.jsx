@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import BackgroundCell from './BacgroundCell';
 
 const calculateFontSize = (value) => {
   if (value < 100) {
@@ -30,7 +31,7 @@ const calculateLightness = (step, maxStep) => {
   return lightness;
 };
 
-const calculateBackgroundColor = (value) => {
+const calculateBackgroundColor = (value, customTileBackground) => {
   if (value === 0) {
     return 'transparent';
   }
@@ -38,7 +39,8 @@ const calculateBackgroundColor = (value) => {
   const maxColorStep = 16;
   const currentColorStep = Math.min(maxColorStep, Math.log2(value));
 
-  const colorValue = `hsl(0,
+  const colorValue = `hsl(
+    ${customTileBackground ? '120' : '0'},
     ${calculateSaturation(currentColorStep, maxColorStep)}%,
     ${calculateLightness(currentColorStep, maxColorStep)}%
   );`;
@@ -46,47 +48,19 @@ const calculateBackgroundColor = (value) => {
   return colorValue;
 };
 
-export const Field = styled.div`
-    height: 475px;
-    position: relative;
-    width: 475px;
-  `;
-
-export const Background = styled.div`
-    align-content: space-between;
-    background-color: #bbada0;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    height: 450px;
-    justify-content: space-between;
-    padding: 5px;
-    position: absolute;
-    width: 450px;
-  `;
-
-export const Playground = styled(Background)`
-    background-color: transparent;
-  `;
-
-export const BackgroundCell = styled.div`
-    margin: 5px;
-    background-color: rgba(238, 228, 218, 0.35);
-    height: 100px;
-    width: 100px;
-    border-radius: 5px;
-  `;
-
-export const PlayGroundCell = styled(BackgroundCell)`
+const PlayGroundCell = styled(BackgroundCell)`
   transform: translate(${({ x }) => x * 110}px, ${({ y }) => y * 110}px);
   text-align: center;
   line-height: 100px;
-  background-color: ${({ value }) => calculateBackgroundColor(value)};
+  background-color: ${({ value, customTileBackground }) => calculateBackgroundColor(value, customTileBackground)};
   position: absolute;
   transition-property: transform;
   transition: 100ms ease-in-out;
   color: #6a4e4e;
   font-weight: 900;
   font-size: ${({ value }) => calculateFontSize(value)}px;
+  border-radius: ${({ roundAll }) => (roundAll ? '50%' : '5px')};
+  font-family: ${({ customFont }) => (customFont ? 'Stick, sans-serif' : 'inherit')};
 `;
+
+export default PlayGroundCell;

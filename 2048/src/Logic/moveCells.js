@@ -3,7 +3,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/prefer-default-export */
-// matrix[0].map((val, index) => matrix.map(row => row[index]).reverse())
+import { cellStates } from './startGame';
 
 export const directions = {
   UP: 'UP',
@@ -59,6 +59,14 @@ export const moveCells = (initCells, direction) => {
     }
   }
 
+  cells
+    .filter((cell) => cell.by != null)
+    .forEach((cell) => {
+      cell.x = cell.by.x;
+      cell.y = cell.by.y;
+      delete cell.by;
+    });
+
   printMatrix(matrix);
 
   return cells;
@@ -96,8 +104,23 @@ const movePuzzle = (matrix, y, x) => {
   while (nextRow >= 0) {
     if (matrix[nextRow][x] === 0) {
       matrix[nextRow][x] = matrix[currentRow][x];
+      matrix[currentRow][x].state = cellStates.MOVING;
       matrix[currentRow][x] = 0;
       currentRow = nextRow;
+    } else if (
+      matrix[nextRow][x].value === matrix[currentRow][x].value
+      && (matrix[nextRow][x].state === cellStates.IDLE
+        || matrix[nextRow][x].state === cellStates.MOVING)
+    ) {
+      matrix[nextRow][x].state = cellStates.DYING;
+      matrix[nextRow][x].by = matrix[currentRow][x];
+
+      matrix[currentRow][x].state = cellStates.INCREASING;
+      matrix[nextRow][x] = matrix[currentRow][x];
+      matrix[currentRow][x] = 0;
+      currentRow = nextRow;
+    } else {
+      break;
     }
     nextRow -= 1;
   }
