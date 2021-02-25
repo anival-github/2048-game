@@ -30,12 +30,12 @@ const SoundsControlls = (props) => {
     musicStop();
   };
 
-  const stopSoundsHandler = () => {
-    props.disableMoveSounds();
-  };
-
-  const playSoundsHandler = () => {
-    props.enableMoveSounds();
+  const soundsHandler = () => {
+    if (props.areSoundsEnabled) {
+      props.disableMoveSounds();
+    } else {
+      props.enableMoveSounds();
+    }
   };
 
   const soundsVolumeChangeHandler = (e) => {
@@ -49,11 +49,12 @@ const SoundsControlls = (props) => {
   return (
     <Container>
       <Button onClick={playMusicHandler}>
-        Music on
+        <span className="material-icons">music_note</span>
       </Button>
       <label htmlFor="music-volume-control">
-        music volume
+        <span className="volume_description">music volume</span>
         <input
+          className="volume_range"
           type="range"
           id="music-volume-control"
           onChange={musicVolumeChangeHandler}
@@ -61,22 +62,21 @@ const SoundsControlls = (props) => {
         />
       </label>
       <Button onClick={stopMusicHandler}>
-        Music off
-      </Button>
-      <Button onClick={playSoundsHandler}>
-        Sounds on
+        <span className="material-icons">music_off</span>
       </Button>
       <label htmlFor="sounds-volume-control">
-        sounds volume
+        <span className="volume_description">sounds volume</span>
         <input
+          className="volume_range"
           type="range"
           id="sounds-volume-control"
           onChange={soundsVolumeChangeHandler}
           value={props.soundsVolume * 100}
         />
       </label>
-      <Button onClick={stopSoundsHandler}>
-        Sounds off
+      <Button onClick={soundsHandler}>
+        {props.areSoundsEnabled && <span className="material-icons">volume_off</span>}
+        {!props.areSoundsEnabled && <span className="material-icons">volume_up</span>}
       </Button>
     </Container>
   );
@@ -84,6 +84,7 @@ const SoundsControlls = (props) => {
 
 const mapStateToProps = (state) => ({
   isMusicEnabled: state.sounds.backgroundMusic.isEnabled,
+  areSoundsEnabled: state.sounds.moveTileSounds.isEnabled,
   musicVolume: state.sounds.backgroundMusic.volume,
   soundsVolume: state.sounds.moveTileSounds.volume,
 });

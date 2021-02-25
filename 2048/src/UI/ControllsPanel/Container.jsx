@@ -4,9 +4,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 20px 0;
   width: 100%;
   align-items: center;
+  margin-bottom: 10px;
+  padding: 0 5px;
 `;
 
 export default Container;

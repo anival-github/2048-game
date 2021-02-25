@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 const Field = styled.div`
-  height: 475px;
+  height: 450px;
   position: relative;
-  width: 475px;
+  width: 450px;
 `;
 
 export default Field;

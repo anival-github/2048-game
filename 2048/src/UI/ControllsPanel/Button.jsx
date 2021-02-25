@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Button = styled.button`
-  background-color: brown;
+  background-color: #8f7a66;
   border-radius: 5px;
   border: none;
   color: #fff;
@@ -12,6 +12,14 @@ const Button = styled.button`
   padding: 5px 15px;
   text-transform: capitalize;
   align-items: center;
+`;
+
+export const ButtonFullScreen = styled(Button)`
+  padding-top: 0;
+  padding-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export default Button;

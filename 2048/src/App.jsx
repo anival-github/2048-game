@@ -12,9 +12,10 @@ import FieldContainer from './UI/Field/FieldContainer';
 import Footer from './UI/Layout/Footer';
 import Info from './UI/Layout/Info';
 import Layout from './UI/Layout/Layout';
-import BestScoresContainer from './UI/ControllsPanel/BestScoresContainer';
+// import BestScoresContainer from './UI/ControllsPanel/BestScoresContainer';
 import tinkSound from './assets/sounds/tink-sound.wav';
 import SoundsControlls from './UI/ControllsPanel/SoundsControlls';
+import ScoresPanel from './UI/ControllsPanel/ScoresPanel';
 
 const App = (props) => {
   const fullScreenHandle = useFullScreenHandle();
@@ -32,10 +33,8 @@ const App = (props) => {
     <div className="App">
       <Layout>
         <SoundsControlls />
-        <BestScoresContainer>Best</BestScoresContainer>
-        <ControllsPanel
-          fullScreenHandle={fullScreenHandle}
-        />
+        <ControllsPanel fullScreenHandle={fullScreenHandle} />
+        <ScoresPanel />
         <FullScreen handle={fullScreenHandle}>
           <FieldContainer moveTileSound={moveTileSound} />
         </FullScreen>

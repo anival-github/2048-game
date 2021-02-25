@@ -2,8 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { connect } from 'react-redux';
-import Button from './Button';
-import Score from './Score';
+import Button, { ButtonFullScreen } from './Button';
 import {
   startNewGame, roundAll, changeFont, changeBackGround,
 } from '../../redux/field-reducer';
@@ -20,26 +19,15 @@ const ControllsPanel = (props) => (
     <Button onClick={props.changeBackGround}>
       Background
     </Button>
-    <Score>
-      <span>Score: </span>
-      {props.score}
-    </Score>
-    {/* <Button onClick={props.squareAll}>
-      Square
-    </Button> */}
     <Button onClick={props.changeFont}>
       Font
     </Button>
-    <Button onClick={props.fullScreenHandle.enter}>
-      Fullscreen
-    </Button>
+    <ButtonFullScreen onClick={props.fullScreenHandle.enter}>
+      <span className="material-icons fs">fullscreen</span>
+    </ButtonFullScreen>
   </Container>
 );
 
-const mapStateToProps = (state) => ({
-  score: state.field.score,
-});
-
-export default connect(mapStateToProps, {
+export default connect(null, {
   startNewGame, roundAll, changeFont, changeBackGround,
 })(ControllsPanel);
