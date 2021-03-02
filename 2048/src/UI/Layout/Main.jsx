@@ -7,6 +7,7 @@ const Main = styled.main`
   justify-content: center;
   width: 100%;
   height: 100vh;
+  text-align: center;
 `;
 
 export default Main;

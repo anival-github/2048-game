@@ -2,16 +2,20 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { connect } from 'react-redux';
-import Button, { ButtonFullScreen } from './Button';
+import Button from '../Common/Button';
+import FullScreenButton from '../Common/FullScreenButton';
 import {
-  startNewGame, roundAll, changeFont, changeBackGround,
+  startNewGame, roundAll, changeFont, changeBackGround, autoPlay,
 } from '../../redux/field-reducer';
-import Container from './Container';
+import Container from '../Common/Container';
 
 const ControllsPanel = (props) => (
   <Container>
     <Button onClick={props.startNewGame}>
       Start
+    </Button>
+    <Button onClick={() => props.autoPlay(true)}>
+      Auto
     </Button>
     <Button onClick={props.roundAll}>
       Round
@@ -22,12 +26,12 @@ const ControllsPanel = (props) => (
     <Button onClick={props.changeFont}>
       Font
     </Button>
-    <ButtonFullScreen onClick={props.fullScreenHandle.enter}>
+    <FullScreenButton onClick={props.fullScreenHandle.enter}>
       <span className="material-icons fs">fullscreen</span>
-    </ButtonFullScreen>
+    </FullScreenButton>
   </Container>
 );
 
 export default connect(null, {
-  startNewGame, roundAll, changeFont, changeBackGround,
+  startNewGame, roundAll, changeFont, changeBackGround, autoPlay,
 })(ControllsPanel);

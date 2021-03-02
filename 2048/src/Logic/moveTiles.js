@@ -24,10 +24,10 @@ const printMatrix = (matrix) => {
   });
 
   printString += ']';
-  console.log(printString);
+  // console.log(printString);
 };
 
-export const moveCells = (initCells, direction) => {
+export const moveTiles = (initCells, direction) => {
   const cells = initCells.slice();
 
   let matrix = createMatrix(4, 4);

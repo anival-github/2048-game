@@ -8,7 +8,9 @@ const populateField = (cells) => {
     occupiedCoords.add(cell.x * 4 + cell.y);
   });
 
-  if (occupiedCoords.size === 16) return;
+  if (occupiedCoords.size === 16) {
+    return { isGameEnded: true };
+  }
 
   let x;
   let y;
@@ -23,7 +25,7 @@ const populateField = (cells) => {
     occupiedCoords.add(sum);
   } while (startSize === occupiedCoords.size);
 
-  return [...cells, createCell(y, x, 2)];
+  return { cells: [...cells, createCell(y, x, 2)] };
 };
 
 export default populateField;

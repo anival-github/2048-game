@@ -7,15 +7,14 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import './App.css';
 import useSound from 'use-sound';
 import { connect } from 'react-redux';
-import ControllsPanel from './UI/ControllsPanel/ControllsPanel';
+import SettingsControls from './UI/SettingsControls/SettingsControls';
 import FieldContainer from './UI/Field/FieldContainer';
-import Footer from './UI/Layout/Footer';
-import Info from './UI/Layout/Info';
+import Footer from './UI/Footer/Footer';
+import Info from './UI/Info/Info';
 import Layout from './UI/Layout/Layout';
-// import BestScoresContainer from './UI/ControllsPanel/BestScoresContainer';
 import tinkSound from './assets/sounds/tink-sound.wav';
-import SoundsControlls from './UI/ControllsPanel/SoundsControlls';
-import ScoresPanel from './UI/ControllsPanel/ScoresPanel';
+import SoundsControlls from './UI/SoundControls/SoundsControlls';
+import ScoresPanel from './UI/ScoresPanel/ScoresPanel';
 
 const App = (props) => {
   const fullScreenHandle = useFullScreenHandle();
@@ -30,18 +29,16 @@ const App = (props) => {
   );
 
   return (
-    <div className="App">
-      <Layout>
-        <SoundsControlls />
-        <ControllsPanel fullScreenHandle={fullScreenHandle} />
-        <ScoresPanel />
-        <FullScreen handle={fullScreenHandle}>
-          <FieldContainer moveTileSound={moveTileSound} />
-        </FullScreen>
-        <Info />
-        <Footer />
-      </Layout>
-    </div>
+    <Layout>
+      <SoundsControlls />
+      <SettingsControls fullScreenHandle={fullScreenHandle} />
+      <ScoresPanel />
+      <FullScreen handle={fullScreenHandle}>
+        <FieldContainer moveTileSound={moveTileSound} />
+      </FullScreen>
+      <Info />
+      <Footer />
+    </Layout>
   );
 };
 

@@ -4,11 +4,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import useSound from 'use-sound';
-import Button from './Button';
+import Button from '../Common/Button';
 import {
   disableMoveSounds, enableMoveSounds, changeSoundsVolume, changeMusicVolume,
 } from '../../redux/sounds-reducer';
-import Container from './Container';
+import Container from '../Common/Container';
 import backgroundMusic from '../../assets/sounds/background-music.mp3';
 
 const SoundsControlls = (props) => {
@@ -92,8 +92,3 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   disableMoveSounds, enableMoveSounds, changeSoundsVolume, changeMusicVolume,
 })(SoundsControlls);
-
-// let volume = document.querySelector("#volume-control");
-// volume.addEventListener("change", function(e) {
-// audio.volume = e.currentTarget.value / 100;
-// })

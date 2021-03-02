@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-debugger */
 /* eslint-disable no-use-before-define */
-import { directions, moveCells } from '../Logic/moveCells';
+import { directions, moveTiles } from '../Logic/moveTiles';
 import populateField from '../Logic/populateField';
 import removeAndIncreaseCells from '../Logic/removeAndIncrease';
 import { setInitialTiles } from '../Logic/startGame';
@@ -17,6 +17,8 @@ const CHANGE_FONT = '2048/field/CHANGE_FONT';
 const CHANGE_BACKGROUND = '2048/field/CHANGE_BACKGROUND';
 
 const initialState = {
+  isGameWon: false,
+  isGameEnded: false,
   cells: [],
   score: 0,
   bestScores: [],
@@ -43,16 +45,18 @@ export const fieldReducer = (state = initialState, action) => {
         cells: setInitialTiles(),
         bestScores: addBestScore(state.bestScores, state.score),
         score: 0,
+        isGameEnded: false,
+        isGameWon: false,
       };
     case MOVE_PUZZLES:
       return {
         ...state,
-        cells: moveCells(state.cells, mapKeyToDirection[action.key]),
+        cells: moveTiles(state.cells, mapKeyToDirection[action.key]),
       };
     case ADD_TILE:
       return {
         ...state,
-        cells: populateField(state.cells),
+        ...populateField(state.cells),
       };
     case MERGE_TILES_AND_ADD_POINTS:
       return {
@@ -84,7 +88,12 @@ export const fieldReducer = (state = initialState, action) => {
   }
 };
 
-export const startNewGame = () => ({
+export const startNewGame = () => (dispatch) => {
+  clearInterval(timerId);
+  dispatch(startNewGameSuccess());
+};
+
+export const startNewGameSuccess = () => ({
   type: START_NEW_GAME,
 });
 
@@ -104,7 +113,6 @@ export const mergeTilesAndAddPoints = () => ({
 export const makeMove = (key) => (dispatch) => {
   dispatch(movePuzzles(key));
   dispatch(addTile());
-  dispatch(mergeTilesAndAddPoints());
 };
 
 export const continueGame = (state) => ({
@@ -113,12 +121,14 @@ export const continueGame = (state) => ({
 });
 
 export const initializeApp = () => (dispatch) => {
-  const savedGameStatus = localStorage.getItem('field');
-  if (savedGameStatus) {
-    dispatch(continueGame(JSON.parse(savedGameStatus)));
-  } else {
-    dispatch(startNewGame());
-  }
+  dispatch(startNewGameSuccess());
+
+  // const savedGameStatus = localStorage.getItem('field');
+  // if (savedGameStatus) {
+  //   dispatch(continueGame(JSON.parse(savedGameStatus)));
+  // } else {
+  //   dispatch(startNewGame());
+  // }
 };
 
 export const roundAll = () => ({
@@ -132,3 +142,21 @@ export const changeFont = () => ({
 export const changeBackGround = () => ({
   type: CHANGE_BACKGROUND,
 });
+
+const autoPlayDirections = ['ArrowUp', 'ArrowRight', 'ArrowLeft', 'ArrowDown'];
+let timerId;
+
+export const autoPlay = (autoPlayIsWorking) => (dispatch) => {
+  if (autoPlayIsWorking) {
+    const autoPlayCallBack = () => {
+      const index = Math.floor(Math.random() * 3.9);
+      dispatch(makeMove(autoPlayDirections[index]));
+    };
+
+    timerId = setInterval(autoPlayCallBack, 500);
+  }
+
+  if (!autoPlayIsWorking) {
+    clearInterval(timerId);
+  }
+};

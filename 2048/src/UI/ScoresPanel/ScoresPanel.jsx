@@ -3,7 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Score from './Score';
-import Container from './Container';
+import Container from '../Common/Container';
 import ScoreDescription from './ScoreDescription';
 import BestScores from './BestScores';
 

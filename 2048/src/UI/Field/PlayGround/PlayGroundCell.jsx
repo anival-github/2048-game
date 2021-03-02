@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import BackgroundCell from './BacgroundCell';
+import BackgroundCell from '../BackGround/BacgroundCell';
 
 const calculateFontSize = (value) => {
   if (value < 100) {

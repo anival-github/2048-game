@@ -5,6 +5,7 @@ import { cellStates } from './startGame';
 
 const removeAndIncreaseCells = (cells, score) => {
   let sum = score;
+  let isGameWon;
 
   const props = {
     cells: cells
@@ -14,10 +15,14 @@ const removeAndIncreaseCells = (cells, score) => {
           cell.value *= 2;
           sum += cell.value;
         }
+        if (cell.value >= 2048) {
+          isGameWon = true;
+        }
         cell.state = cellStates.IDLE;
         return cell;
       }),
     score: sum,
+    isGameWon,
   };
 
   return props;

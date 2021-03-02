@@ -14,12 +14,4 @@ const Button = styled.button`
   align-items: center;
 `;
 
-export const ButtonFullScreen = styled(Button)`
-  padding-top: 0;
-  padding-bottom: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 export default Button;
