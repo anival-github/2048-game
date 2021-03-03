@@ -1,5 +1,4 @@
-/* eslint-disable no-debugger */
-/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-shadow */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { connect } from 'react-redux';
@@ -10,13 +9,17 @@ import {
 } from '../../redux/sounds-reducer';
 import Container from '../Common/Container';
 import backgroundMusic from '../../assets/sounds/background-music.mp3';
+import './SoundsControlls.css';
 
-const SoundsControlls = (props) => {
+const SoundsControlls = ({
+  musicVolume, isMusicEnabled, areSoundsEnabled, soundsVolume,
+  disableMoveSounds, enableMoveSounds, changeSoundsVolume, changeMusicVolume,
+}) => {
   const [playBackgroundMusic, { sound: musicSound, stop: musicStop }] = useSound(
     backgroundMusic,
     {
-      volume: props.musicVolume,
-      soundEnabled: props.isMusicEnabled,
+      volume: musicVolume,
+      soundEnabled: isMusicEnabled,
       interrupt: true,
     },
   );
@@ -31,19 +34,19 @@ const SoundsControlls = (props) => {
   };
 
   const soundsHandler = () => {
-    if (props.areSoundsEnabled) {
-      props.disableMoveSounds();
+    if (areSoundsEnabled) {
+      disableMoveSounds();
     } else {
-      props.enableMoveSounds();
+      enableMoveSounds();
     }
   };
 
   const soundsVolumeChangeHandler = (e) => {
-    props.changeSoundsVolume(e.currentTarget.value / 100);
+    changeSoundsVolume(e.currentTarget.value / 100);
   };
 
   const musicVolumeChangeHandler = (e) => {
-    props.changeMusicVolume(e.currentTarget.value / 100);
+    changeMusicVolume(e.currentTarget.value / 100);
   };
 
   return (
@@ -58,7 +61,7 @@ const SoundsControlls = (props) => {
           type="range"
           id="music-volume-control"
           onChange={musicVolumeChangeHandler}
-          value={props.musicVolume * 100}
+          value={musicVolume * 100}
         />
       </label>
       <Button onClick={stopMusicHandler}>
@@ -71,12 +74,12 @@ const SoundsControlls = (props) => {
           type="range"
           id="sounds-volume-control"
           onChange={soundsVolumeChangeHandler}
-          value={props.soundsVolume * 100}
+          value={soundsVolume * 100}
         />
       </label>
       <Button onClick={soundsHandler}>
-        {props.areSoundsEnabled && <span className="material-icons">volume_off</span>}
-        {!props.areSoundsEnabled && <span className="material-icons">volume_up</span>}
+        {areSoundsEnabled && <span className="material-icons">volume_off</span>}
+        {!areSoundsEnabled && <span className="material-icons">volume_up</span>}
       </Button>
     </Container>
   );

@@ -14,7 +14,8 @@ import Background from './BackGround/Background';
 import Playground from './PlayGround/PlayGround';
 import GameEndedField from './GameEndedField/GameEndedField';
 import {
-  startNewGame, makeMove, initializeApp, mergeTilesAndAddPoints, autoPlay,
+  startNewGame, makeMove, initializeApp,
+  mergeTilesAndAddPoints, autoPlay, saveGame,
 } from '../../redux/field-reducer';
 import GameEndedDescription from './GameEndedField/GameEndedDescription';
 
@@ -23,17 +24,25 @@ class FieldContainer extends Component {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.setLocalStorage = this.setLocalStorage.bind(this);
+    this.onVisibilityChange = this.onVisibilityChange.bind(this);
     this.onTransitionEnd = this.onTransitionEnd.bind(this);
   }
 
   componentDidMount() {
     this.props.initializeApp();
     document.addEventListener('keydown', this.handleKeyPress);
-    window.addEventListener('unload', this.setLocalStorage);
+    document.addEventListener('visibilitychange', this.onVisibilityChange);
+  }
+
+  onVisibilityChange() {
+    console.log(document.visibilityState)
+    if (document.visibilityState === 'hidden') {
+      this.props.saveGame(this.props.fieldState)
+    }
   }
 
   componentDidUpdate(prevProps) {
-    const { cells } = this.props;
+    const { cells, isGameEnded, autoPlay } = this.props;
 
     if (cells !== prevProps.cells) {
       document.querySelectorAll('.transition')
@@ -42,14 +51,14 @@ class FieldContainer extends Component {
         });
     }
 
-    if (this.props.isGameEnded && this.props.isGameEnded !== prevProps.isGameEnded) {
-      this.props.autoPlay(false)
+    if (isGameEnded && isGameEnded !== prevProps.isGameEnded) {
+      autoPlay(false)
     }
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyPress);
-    window.removeEventListener('unload', this.setLocalStorage);
+    document.removeEventListener('visibilitychange', this.onVisibilityChange);
     document.querySelectorAll('.transition')
       .forEach((element) => {
         element.removeEventListener('transitionend', this.onTransitionEnd);
@@ -60,6 +69,7 @@ class FieldContainer extends Component {
     this.props.moveTileSound();
     if (['ArrowUp', 'ArrowRight', 'ArrowLeft', 'ArrowDown'].includes(e.code) && !this.props.isGameEnded) {
       this.props.makeMove(e.code);
+      this.setLocalStorage()
     }
     if (e.code === 'Escape') {
       this.props.startNewGame();
@@ -71,7 +81,7 @@ class FieldContainer extends Component {
   }
 
   setLocalStorage() {
-    localStorage.setItem('field', JSON.stringify(this.props.field));
+    localStorage.setItem('field', JSON.stringify(this.props.fieldState));
   }
 
   render() {
@@ -120,16 +130,16 @@ class FieldContainer extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  fieldState: state.field,
   isGameWon: state.field.isGameWon,
   isGameEnded: state.field.isGameEnded,
   cells: state.field.cells,
   tilesCount: state.field.tilesCount,
-  field: state.field,
   roundAll: state.field.roundAll,
   customFont: state.field.customFont,
   customTileBackground: state.field.customTileBackground,
 });
 
 export default connect(mapStateToProps, {
-  startNewGame, makeMove, initializeApp, mergeTilesAndAddPoints, autoPlay,
+  startNewGame, makeMove, initializeApp, mergeTilesAndAddPoints, autoPlay, saveGame,
 })(FieldContainer);

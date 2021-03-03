@@ -6,6 +6,7 @@ import populateField from '../Logic/populateField';
 import removeAndIncreaseCells from '../Logic/removeAndIncrease';
 import { setInitialTiles } from '../Logic/startGame';
 import addBestScore from '../Logic/addBestScore';
+import gameStatusAPI from '../api/api';
 
 const START_NEW_GAME = '2048/field/START_NEW_GAME';
 const MOVE_PUZZLES = '2048/field/MOVE_PUZZLES';
@@ -21,10 +22,8 @@ const initialState = {
   isGameEnded: false,
   cells: [],
   score: 0,
-  bestScores: [],
+  bestScores: [0],
   tilesCount: 16,
-  musicEnabled: true,
-  moveSoundsEnabled: true,
   roundAll: false,
   customFont: false,
   customTileBackground: false,
@@ -120,15 +119,33 @@ export const continueGame = (state) => ({
   state,
 });
 
-export const initializeApp = () => (dispatch) => {
+export const initializeApp = () => async (dispatch) => {
   dispatch(startNewGameSuccess());
+  const localStorageData = JSON.parse(localStorage.getItem('field'));
+  if (localStorageData) {
+    dispatch(continueGame(localStorageData));
+    console.log(localStorageData);
+    debugger;
+  } else {
+    const data = await gameStatusAPI.getStatus();
+    if (data.length > 0) {
+      dispatch(continueGame(data[0]));
+    } else {
+      dispatch(startNewGame());
+    }
+  }
+};
 
-  // const savedGameStatus = localStorage.getItem('field');
-  // if (savedGameStatus) {
-  //   dispatch(continueGame(JSON.parse(savedGameStatus)));
-  // } else {
-  //   dispatch(startNewGame());
-  // }
+export const saveGame = (fieldState) => async () => {
+  await gameStatusAPI.deleteOldStatus();
+  await gameStatusAPI.saveStatus(fieldState);
+  debugger;
+};
+
+export const saveStateWhenClosed = (fieldState) => async () => {
+  const wassent = await gameStatusAPI.sendWhenClosed(fieldState);
+  console.log(wassent);
+  debugger;
 };
 
 export const roundAll = () => ({

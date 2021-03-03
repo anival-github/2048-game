@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Button from './Button';
+import Button from '../Common/Button';
 
 const FullScreenButton = styled(Button)`
   padding-top: 0;

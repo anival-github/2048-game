@@ -3,7 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Button from '../Common/Button';
-import FullScreenButton from '../Common/FullScreenButton';
+import FullScreenButton from './FullScreenButton';
 import {
   startNewGame, roundAll, changeFont, changeBackGround, autoPlay,
 } from '../../redux/field-reducer';

@@ -11,7 +11,6 @@ const Button = styled.button`
   outline: none;
   padding: 5px 15px;
   text-transform: capitalize;
-  align-items: center;
 `;
 
 export default Button;
