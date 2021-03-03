@@ -124,8 +124,6 @@ export const initializeApp = () => async (dispatch) => {
   const localStorageData = JSON.parse(localStorage.getItem('field'));
   if (localStorageData) {
     dispatch(continueGame(localStorageData));
-    console.log(localStorageData);
-    debugger;
   } else {
     const data = await gameStatusAPI.getStatus();
     if (data.length > 0) {
@@ -139,12 +137,6 @@ export const initializeApp = () => async (dispatch) => {
 export const saveGame = (fieldState) => async () => {
   await gameStatusAPI.deleteOldStatus();
   await gameStatusAPI.saveStatus(fieldState);
-  debugger;
-};
-
-export const saveStateWhenClosed = (fieldState) => async () => {
-  const wassent = await gameStatusAPI.sendWhenClosed(fieldState);
-  console.log(wassent);
   debugger;
 };
 

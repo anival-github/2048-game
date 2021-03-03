@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import * as axios from 'axios';
 
 const instance = axios.create({
@@ -13,7 +12,7 @@ const gameStatusAPI = {
 
   deleteOldStatus() {
     return instance.delete('gamestatus')
-      .then((response) => console.log(response));
+      .then((response) => response.data);
   },
 
   saveStatus(gameStatus) {
