@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-debugger */
-/* eslint-disable no-use-before-define */
 import { directions, moveTiles } from '../Logic/moveTiles';
 import populateField from '../Logic/populateField';
 import removeAndIncreaseCells from '../Logic/removeAndIncrease';
@@ -16,6 +14,9 @@ const CONTINUE_GAME = '2048/field/CONTINUE_GAME';
 const ROUND_ALL = '2048/field/ROUND_ALL';
 const CHANGE_FONT = '2048/field/CHANGE_FONT';
 const CHANGE_BACKGROUND = '2048/field/CHANGE_BACKGROUND';
+
+const autoPlayDirections = ['ArrowUp', 'ArrowRight', 'ArrowLeft', 'ArrowDown'];
+let timerId;
 
 const initialState = {
   isGameWon: false,
@@ -87,14 +88,14 @@ export const fieldReducer = (state = initialState, action) => {
   }
 };
 
+export const startNewGameSuccess = () => ({
+  type: START_NEW_GAME,
+});
+
 export const startNewGame = () => (dispatch) => {
   clearInterval(timerId);
   dispatch(startNewGameSuccess());
 };
-
-export const startNewGameSuccess = () => ({
-  type: START_NEW_GAME,
-});
 
 export const movePuzzles = (key) => ({
   type: MOVE_PUZZLES,
@@ -137,7 +138,6 @@ export const initializeApp = () => async (dispatch) => {
 export const saveGame = (fieldState) => async () => {
   await gameStatusAPI.deleteOldStatus();
   await gameStatusAPI.saveStatus(fieldState);
-  debugger;
 };
 
 export const roundAll = () => ({
@@ -151,9 +151,6 @@ export const changeFont = () => ({
 export const changeBackGround = () => ({
   type: CHANGE_BACKGROUND,
 });
-
-const autoPlayDirections = ['ArrowUp', 'ArrowRight', 'ArrowLeft', 'ArrowDown'];
-let timerId;
 
 export const autoPlay = (autoPlayIsWorking) => (dispatch) => {
   if (autoPlayIsWorking) {

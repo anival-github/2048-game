@@ -1,7 +1,9 @@
+/* eslint-disable no-undef */
 const DISABLE_MOVE_SOUNDS = '2048/sounds/DISABLE_MOVE_SOUNDS';
 const ENABLE_MOVE_SOUNDS = '2048/sounds/ENABLE_MOVE_SOUNDS';
 const CHANGE_SOUNDS_VOLUME = '2048/sounds/CHANGE_SOUNDS_VOLUME';
 const CHANGE_MUSIC_VOLUME = '2048/sounds/CHANGE_MUSIC_VOLUME';
+const SET_SOUNDS_SETTINGS = '2048/sounds/SET_SOUNDS_SETTINGS';
 
 const initialState = {
   backgroundMusic: {
@@ -40,6 +42,11 @@ export const soundsReducer = (state = initialState, action) => {
         backgroundMusic: { ...state.backgroundMusic, volume: action.volume },
         moveTileSounds: { ...state.moveTileSounds },
       };
+    case SET_SOUNDS_SETTINGS:
+      return {
+        ...state,
+        ...action.sounds,
+      };
     default:
       return state;
   }
@@ -62,3 +69,16 @@ export const changeMusicVolume = (volume) => ({
   type: CHANGE_MUSIC_VOLUME,
   volume,
 });
+
+export const setSoundsSettings = (sounds) => ({
+  type: SET_SOUNDS_SETTINGS,
+  sounds,
+});
+
+export const initializeSoundsSettings = () => async (dispatch) => {
+  const localStorageData = JSON.parse(localStorage.getItem('sounds'));
+
+  if (localStorageData) {
+    dispatch(setSoundsSettings(localStorageData));
+  }
+};

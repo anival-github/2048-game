@@ -17,6 +17,7 @@ import {
   startNewGame, makeMove, initializeApp,
   mergeTilesAndAddPoints, autoPlay, saveGame,
 } from '../../redux/field-reducer';
+import { initializeSoundsSettings } from '../../redux/sounds-reducer';
 import GameEndedDescription from './GameEndedField/GameEndedDescription';
 
 class FieldContainer extends Component {
@@ -30,6 +31,8 @@ class FieldContainer extends Component {
 
   componentDidMount() {
     this.props.initializeApp();
+    this.props.initializeSoundsSettings();
+
     document.addEventListener('keydown', this.handleKeyPress);
     document.addEventListener('visibilitychange', this.onVisibilityChange);
   }
@@ -82,6 +85,7 @@ class FieldContainer extends Component {
 
   setLocalStorage() {
     localStorage.setItem('field', JSON.stringify(this.props.fieldState));
+    localStorage.setItem('sounds', JSON.stringify(this.props.soundsState));
   }
 
   render() {
@@ -130,6 +134,7 @@ class FieldContainer extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  soundsState: state.sounds,
   fieldState: state.field,
   isGameWon: state.field.isGameWon,
   isGameEnded: state.field.isGameEnded,
@@ -141,5 +146,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  startNewGame, makeMove, initializeApp, mergeTilesAndAddPoints, autoPlay, saveGame,
+  startNewGame, makeMove, initializeApp, mergeTilesAndAddPoints, autoPlay, saveGame, initializeSoundsSettings,
 })(FieldContainer);

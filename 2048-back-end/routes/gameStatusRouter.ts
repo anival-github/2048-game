@@ -34,4 +34,15 @@ router.delete('/', async (req, res, next) => {
       .json(result)
 });
 
+router.put('/:id', async (req, res, next) => {
+  const { body } = req
+
+  const newBody = await storage.update({
+    ...body,
+    id: req.params.id,
+  });
+
+  res.json(newBody)
+});
+
 export default router;
