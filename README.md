@@ -1,11 +1,11 @@
 # Creating a classic 2048 game with JavaScript + React + Redux
 
-  - [x]  вёрстка, дизайн, UI. Выполняются требования к оформлению приложения +10
+### There are following features implemented: 
   - [x]  animations of moves;
   - [x]  sounds and music with settings;
   - [x]  game statistics;
   - [x]  using localstorage to save game status;
-  - [x]  autoplay.
+  - [x]  autoplay and others.
 
 ### Check how the app works [here](anival-github-react-game.netlify.app/)
 
