@@ -1,0 +1,13 @@
+.info {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: rgb(106, 78, 78);
+}
+
+.arrows {
+  height: 75px;
+  margin: 0 5px;
+}
